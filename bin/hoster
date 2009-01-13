@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+#
+#  Created by Jerod Santo on 2009-01-13
+#  Copyright (c) 2009. All rights reserved.
+
+require '../lib/hoster'
+# begin
+#   require 'rubygems'
+#   require 'hoster'
+# rescue LoadError
+#   # no rubygems to load, so we fail silently
+# end
+
+def help_text(exit_code = 0)
+  script_name = File.basename $0
+  puts """USAGE: #{script_name} add <hostname> [<ip=127.0.1.1>]
+       #{script_name} modify <hostname> <ip>
+       #{script_name} remove <hostname>
+       #{script_name} list [<ip>=all]
+"""
+  exit(exit_code)
+end
+
+if ARGV.size.zero? || ['-h', '--help', 'help'].include?(ARGV.first)
+  help_text
+else
+  hosts = Hosts.new()
+  case ARGV[0]
+  when 'add':
+    if ARGV.size == 2
+      ARGV.shift
+      hosts.add(ARGV[0])
+      hosts.display
+      exit 0
+    elsif ARGV.size == 3
+      ARGV.shift
+      hosts.add(ARGV[0],ARGV[1])
+      hosts.display(ARGV[1])
+    else
+      $stderr.puts "The 'add' command requires at least a hostname.\n\n"
+      help_text 2
+    end
+  when 'modify':
+    if ARGV.size == 3
+      ARGV.shift
+      hosts.modify(ARGV[0],ARGV[1])
+      hosts.display(ARGV[1])
+      exit 0
+    else
+      $stderr.puts "The 'modify' command requires a hostname and an IP.\n\n"
+      help_text 4
+    end
+  when 'remove':
+    if ARGV.size == 2
+      hosts.remove(ARGV[1])
+      puts "  Removed #{ARGV[1]}"
+      exit 0
+    else  
+      $stderr.puts "The 'remove' command requires a hostname.\n\n"
+      help_text 2
+    end
+  when 'list':
+    if ARGV.size == 2
+      hosts.display(ARGV[1])
+    else
+      puts hosts.dump
+    end
+    exit 0
+  else
+    $stderr.puts "Invalid option: #{ARGV[0]}"
+    help_text 1
+  end
+end

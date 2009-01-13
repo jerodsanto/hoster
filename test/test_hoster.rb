@@ -13,10 +13,11 @@ BaseFile = <<CONTENT
 CONTENT
 
 ModifiedFile = <<CONTENT
-127.0.0.1 localhost test.com test.dev
-127.0.1.1 localhost
+127.0.0.1 localhost test.com
+127.0.1.1 localhost test.dev
 192.168.1.1 router router.org
 192.168.1.2 localhost local.host
+192.165.0.1 test.net
 CONTENT
 
 class TestHoster < Test::Unit::TestCase
@@ -68,16 +69,21 @@ class TestHoster < Test::Unit::TestCase
 
     should "remove correct host from line for specified ip address" do
       assert_equal 2, @hoster.entries["192.168.1.1"].size
-      @hoster.remove("router.com", "192.168.1.1")
+      @hoster.remove("router.com")
       assert_equal 1, @hoster.entries["192.168.1.1"].size
       assert_equal "router", @hoster.entries["192.168.1.1"].first
+    end
+    
+    should "add a new ip address if it doesn't exist" do
+      @hoster.add("test.net","192.165.0.1")
+      assert_equal "test.net", @hoster.entries["192.165.0.1"].first
     end
 
     should "write correct changes to file" do
       @hoster.add("test.dev")
       @hoster.add("router.org","192.168.1.1")
-      @hoster.remove("router.com", "192.168.1.1")
-      @hoster.write_changes!
+      @hoster.add("test.net","192.165.0.1")
+      @hoster.remove("router.com")
       assert_equal ModifiedFile, @hoster.dump
     end
   end
