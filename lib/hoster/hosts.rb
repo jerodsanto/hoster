@@ -1,53 +1,62 @@
 class Hosts
 
   attr_reader :entries
-  
+
   def initialize(hosts_path = "/etc/hosts")
-    @hosts_file = File.new(hosts_path,"r+")
-    @entries    = extract_entries(hosts_path)
+    @hosts_path = hosts_path
+    @entries    = extract_entries
   end
-  
-  def raw_data
-    @hosts_file.read
+
+  def dump
+    File.open(@hosts_path,"r") { |f| f.read }
   end
-  
+
   def add(host, ip_address = "127.0.0.1")
     @entries[ip_address] << host
   end
-  
+
   def remove(host, ip_address)
     @entries[ip_address].delete_if { |x| x == host }
   end
-  
-  def finalize_changes!
-    lines = @hosts_file.readlines
+
+  def write_changes!
     @entries.each do |entry|
-      exists_in_file = false
-      lines.each_with_index do |line,index|
-        if line.match(/#{entry.first}/)
-          exists_in_file = true
-          lines[index] = "#{entry.first} #{entry.last.join(' ')}\n"
+      append_this     = true
+      entry_exists    = false
+
+      File.open(@hosts_path,"r+") do |file|
+        lines = file.readlines
+        lines.each_with_index do |line,index|
+          if line =~ /#{entry.first}/
+            if entry_exists
+              lines.delete_at(index)
+            else
+              lines[index] = "#{entry.first} #{entry.last.join(' ')}\n"
+              # update the state of this entry
+              append_this  = false
+              entry_exists = true
+            end
+          end
         end
+        if append_this
+          # append entry to end of @hosts_file
+        end
+        # write out actual changes
+        file.pos = 0
+        file.print lines
+        file.truncate(file.pos)
       end
-      if !exists_in_file
-        # append entry to end of @hosts_file
-      end
-      # write out actual changes
-      @hosts_file.pos = 0
-      @hosts_file.print lines
-      @hosts_file.truncate(@hosts_file.pos)
     end
   end
-  
+
   private
-  
-  def extract_entries(hosts_path)
+
+  def extract_entries
     entries = Hash.new
-    @hosts_file.each do |line|
-      if line.match(/^(\d+\.\d+\.\d+\.\d) (.*)/)
+    File.open(@hosts_path,"r").each do |line|
+      if line =~ /^(\d+\.\d+\.\d+\.\d) (.*)/
         ip_address = $1
         hosts_list = $2.split(' ')
-        
         if entries.has_key?(ip_address)
           hosts_list.each do |host|
             entries[ip_address] << host
@@ -59,5 +68,9 @@ class Hosts
     end
     entries
   end
-  
+
+  def condense!
+    File.open(@hosts_path,"r+")
+  end
+
 end
