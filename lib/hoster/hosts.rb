@@ -18,7 +18,7 @@ class Hosts
     File.open(@hosts_path,"r") { |f| f.read }
   end
 
-  def add(host, ip_address = "127.0.1.1")
+  def add(host, ip_address = "127.0.0.1")
     if @entries.has_key?(ip_address)
       @entries[ip_address] << host
     else
@@ -43,7 +43,7 @@ class Hosts
     end
   end
   
-  def display(ip_address="127.0.1.1")
+  def display(ip_address="127.0.0.1")
     puts "  #{ip_address} = #{@entries.values_at(ip_address).join(' ')}\n"
   end
 

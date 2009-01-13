@@ -3,13 +3,12 @@
 #  Created by Jerod Santo on 2009-01-13
 #  Copyright (c) 2009. All rights reserved.
 
-require '../lib/hoster'
-# begin
-#   require 'rubygems'
-#   require 'hoster'
-# rescue LoadError
-#   # no rubygems to load, so we fail silently
-# end
+begin
+  require 'rubygems'
+  require 'hoster'
+rescue LoadError
+  # no rubygems to load, so we fail silently
+end
 
 def help_text(exit_code = 0)
   script_name = File.basename $0

@@ -13,8 +13,8 @@ BaseFile = <<CONTENT
 CONTENT
 
 ModifiedFile = <<CONTENT
-127.0.0.1 localhost test.com
-127.0.1.1 localhost test.dev
+127.0.0.1 localhost test.com test.dev
+127.0.1.1 localhost
 192.168.1.1 router router.org
 192.168.1.2 localhost local.host
 192.165.0.1 test.net
