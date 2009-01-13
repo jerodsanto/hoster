@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.homepage         = 'http://github.com/sant0sk1/hoster'
   s.require_path     = 'lib'
   s.autorequire      = 'hoster'
-  s.executables      = ["bin/hoser"]
+  s.executables      = ["hoser"]
   s.files            = ["README.md", "bin/hoster", "lib/hoster/hosts.rb", "lib/hoster.rb"]
   s.test_files       = ["test/test_helper.rb", "test/test_hoster.rb"]
   s.has_rdoc         = false
