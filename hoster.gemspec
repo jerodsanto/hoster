@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name             = 'hoster'
-  s.version          = '0.1'
+  s.version          = '0.1.2'
   s.platform         = Gem::Platform::RUBY
   s.summary          = 'Allows you to easily modify your local hosts file using one simple command'
   s.author           = "Jerod Santo"
