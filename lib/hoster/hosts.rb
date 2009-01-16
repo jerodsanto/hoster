@@ -72,29 +72,34 @@ class Hosts
       append_this     = true
       entry_exists    = false
 
-      File.open(@hosts_path,"r+") do |file|
-        lines = file.readlines
-        lines.each_with_index do |line,index|
-          if line =~ /#{entry.first}/
-            if entry_exists || entry.last.empty?
-              lines.delete_at(index)
-            else
-              lines[index] = "#{entry.first} #{entry.last.join(' ')}\n"
-              # update the state of this entry
-              append_this  = false
-              entry_exists = true
+      begin
+        File.open(@hosts_path,"r+") do |file|
+          lines = file.readlines
+          lines.each_with_index do |line,index|
+            if line =~ /#{entry.first}/
+              if entry_exists || entry.last.empty?
+                lines.delete_at(index)
+              else
+                lines[index] = "#{entry.first} #{entry.last.join(' ')}\n"
+                # update the state of this entry
+                append_this  = false
+                entry_exists = true
+              end
             end
           end
+          file.pos = 0
+          file.print lines
+          file.truncate(file.pos)
         end
-        file.pos = 0
-        file.print lines
-        file.truncate(file.pos)
-      end
-      if append_this && !entry.last.empty?
-        File.open(@hosts_path,"a") do |file|
-          file.print "#{entry.first} #{entry.last.join(' ')}\n"
+        if append_this && !entry.last.empty?
+          File.open(@hosts_path,"a") do |file|
+            file.print "#{entry.first} #{entry.last.join(' ')}\n"
+          end
         end
-      end
+    rescue Errno::EACCES
+      puts "You do not have permission to edit #{@hosts_path}. Run as root or use 'sudo'"
+      exit 1
+    end
     end
   end
 
