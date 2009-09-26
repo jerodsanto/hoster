@@ -28,7 +28,10 @@ Usage
 Installation
 ------------
 
-    sudo gem install sant0sk1-hoster --source http://gems.github.com/
+    # from gemcutter (canonical source)
+    gem install hoster
+    # from GitHub (development source)
+    gem install sant0sk1-hoster --source http://gems.github.com/
 
 
 License
