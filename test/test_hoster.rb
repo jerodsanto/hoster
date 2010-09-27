@@ -6,7 +6,7 @@ require 'shoulda'
 BaseFile = <<CONTENT
 127.0.0.1 localhost
 127.0.1.1 localhost
-192.168.1.1 router.com router
+192.168.1.1		router.com router # comment
 192.168.1.2 localhost
 127.0.0.1 test.com
 192.168.1.2 local.host

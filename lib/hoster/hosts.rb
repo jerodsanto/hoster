@@ -52,7 +52,7 @@ class Hosts
   def extract_entries
     entries = Hash.new
     File.open(@hosts_path,"r").each do |line|
-      if line =~ /^(\d+\.\d+\.\d+\.\d+)[ \t]+(.*)?[#\n]/
+      if line =~ /^(\d+\.\d+\.\d+\.\d+)[ \t]+([^#]*)[#\n]/
         ip_address = $1
         hosts_list = $2.split(' ')
         if entries.has_key?(ip_address)
