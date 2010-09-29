@@ -13,25 +13,28 @@ Usage
 -----
 
     $ hoster add testsite.com (defaults to 127.0.0.1)
-      
+
     $ hoster add testsite.com 192.168.1.150
-      
+
     $ hoster modify testsite.com 192.168.1.149
-      
+
     $ hoster remove testsite.com
-      
+
     $ hoster list (prints entire hosts file)
-    
+
     $ hoster list 127.0.0.1
 
 
 Installation
 ------------
 
-    # from gemcutter (canonical source)
     gem install hoster
-    # from GitHub (development source)
-    gem install sant0sk1-hoster --source http://gems.github.com/
+
+
+Contributors
+------------
+
+* [SHIBATA Hiroshi](http://github.com/hsbt)
 
 
 License
